@@ -58,11 +58,9 @@ abstract class AbstractRequest extends BaseAbstractRequest
 
     public function sendData($data)
     {
-        $url = $this->createSignedUrl(array(
-            $data
-        ), 'POST');
+        $url = $this->createSignedUrl($data);
 
-        $response = $this->httpClient->post($url)->send();
+        $response = $this->httpClient->get($url)->send();
 
         return $this->createResponse($response->getBody(true));
     }
@@ -76,13 +74,13 @@ abstract class AbstractRequest extends BaseAbstractRequest
 
     abstract protected function createResponse($data);
 
-    protected function createSignedUrl($params = array(), $method = 'GET')
+    protected function createSignedUrl($params = array())
     {
         $url = $this->getEndpoint(). $this->getResource();
 
         // Generate signature
         $consumer = new Consumer($this->getKey(), $this->getSecret());
-        $request = Request::from_consumer_and_token($consumer, null, $method, $url, $params);
+        $request = Request::from_consumer_and_token($consumer, null, 'GET', $url, $params);
         $request->sign_request(new HmacSha1(), $consumer, null);
 
         return $request->to_url();

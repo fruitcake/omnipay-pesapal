@@ -30,7 +30,7 @@ class PurchaseRequest extends AbstractRequest
         $url = $this->createSignedUrl(array(
             'pesapal_request_data' => $xml->asXML(),
             'oauth_callback' => $this->getReturnUrl(),
-            ), 'GET');
+            ));
 
 
         return $this->createResponse($url);
