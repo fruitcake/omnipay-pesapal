@@ -53,6 +53,4 @@ class CompletePurchaseRequest extends AbstractRequest
     {
         return $this->response = new CompletePurchaseResponse($this, $data);
     }
-
-
 }

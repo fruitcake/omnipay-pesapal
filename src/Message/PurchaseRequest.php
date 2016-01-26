@@ -46,8 +46,8 @@ class PurchaseRequest extends AbstractRequest
             throw new InvalidRequestException("A phonenumber or email is required");
         }
 
-        // Create an unique reference
         if ( ! $this->getTransactionReference()) {
+            // Create an unique reference
             $this->setTransactionReference(md5(uniqid(true)));
         }
 
@@ -77,7 +77,6 @@ class PurchaseRequest extends AbstractRequest
             $data['LastName'] = $card->getLastName();
         }
 
-
         return $data;
     }
 
@@ -85,6 +84,4 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->response = new PurchaseResponse($this, $data);
     }
-
-
 }

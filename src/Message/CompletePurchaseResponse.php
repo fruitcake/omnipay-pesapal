@@ -11,10 +11,10 @@ use Omnipay\Common\Message\RequestInterface;
  */
 class CompletePurchaseResponse extends AbstractResponse
 {
-    public function __construct(RequestInterface $request, $data)
+    public function __construct(RequestInterface $request, $dataStr)
     {
-        // Parse string
-        parse_str($data, $data);
+        // Parse string into parameters
+        parse_str($dataStr, $data);
 
         parent::__construct($request, $data);
     }
