@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Skeleton;
+namespace Omnipay\Pesapal;
 
 use Omnipay\Tests\GatewayTestCase;
 use Omnipay\Common\CreditCard;
@@ -11,29 +11,28 @@ class GatewayTest extends GatewayTestCase
     {
         parent::setUp();
 
-        $this->gateway = new SkeletonGateway($this->getHttpClient(), $this->getHttpRequest());
+        $this->gateway = new Gateway($this->getHttpClient(), $this->getHttpRequest());
+
+        $this->gateway->initialize(array(
+            'key' => 'my-key',
+            'secret' => 'my-secret',
+        ));
 
         $this->options = array(
             'amount' => '10.00',
             'card' => new CreditCard(array(
-                'firstName' => 'Example',
-                'lastName' => 'User',
-                'number' => '4111111111111111',
-                'expiryMonth' => '12',
-                'expiryYear' => '2016',
-                'cvv' => '123',
+                'email' => 'test@example.com',
             )),
         );
     }
 
-    public function testAuthorize()
+    public function testPurchase()
     {
-        $this->setMockHttpResponse('AuthorizeSuccess.txt');
+        $response = $this->gateway->purchase($this->options)->send();
 
-        $response = $this->gateway->authorize($this->options)->send();
-
-        $this->assertTrue($response->isSuccessful());
-        $this->assertEquals('1234', $response->getTransactionReference());
+        $this->assertFalse($response->isSuccessful());
+        $this->assertTrue($response->isRedirect());
+        $this->assertNotEmpty($response->getTransactionReference());
         $this->assertNull($response->getMessage());
     }
 }

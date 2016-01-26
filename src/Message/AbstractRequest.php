@@ -70,9 +70,8 @@ abstract class AbstractRequest extends BaseAbstractRequest
 
         $response = $this->httpClient->post($url)->send();
 
-        parse_str($response->getBody(true), $result);
-
-        return $this->createResponse($result);
+        var_dump((string) $response);
+        return $this->createResponse($response->getBody(true));
 
     }
 

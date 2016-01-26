@@ -21,6 +21,8 @@ class CompletePurchaseRequest extends AbstractRequest
 
     public function getData()
     {
+        $this->validate('key', 'secret');
+
         $data = array(
             'pesapal_merchant_reference' => $this->getTransactionReference(),
         );

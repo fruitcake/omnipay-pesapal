@@ -28,7 +28,7 @@ $ composer require fruitcakestudio/omnipay-pesapal
 
 The following gateways are provided by this package:
 
- * pesapal
+ * Pesapal
 
 For general usage instructions, please see the main [Omnipay](https://github.com/thephpleague/omnipay) repository.
 

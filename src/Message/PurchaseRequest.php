@@ -38,8 +38,15 @@ class PurchaseRequest extends AbstractRequest
 
     public function getData()
     {
-        $this->validate('amount', 'card');
+        $this->validate('key', 'secret', 'amount', 'card');
+        $card = $this->getCard();
 
+        // Either phone or email is required
+        if ( !$card->getEmail() && ! $card->getPhone()) {
+            throw new InvalidRequestException("A phonenumber or email is required");
+        }
+
+        // Create an unique reference
         if ( ! $this->getTransactionReference()) {
             $this->setTransactionReference(md5(uniqid(true)));
         }
@@ -51,13 +58,25 @@ class PurchaseRequest extends AbstractRequest
             'Reference' => $this->getTransactionReference(),
         );
 
-        if ($this->getCard()->getEmail()) {
-            $data['Email'] = $this->getCard()->getEmail();
-        } elseif ($this->getCard()->getPhone()) {
-            $data['Phonenumber'] = $this->getCard()->getPhone();
-        } else {
-            throw new InvalidRequestException("A phonenumber or email is required");
+        if ($this->getCurrency()) {
+            $data['Currency'] = $this->getCurrency();
         }
+
+        if ($card->getEmail()) {
+            $data['Email'] = $this->getCard()->getEmail();
+        }
+        if ($card->getPhone()) {
+            $data['PhoneNumber'] = $this->getCard()->getPhone();
+        }
+
+        if ($card->getFirstName()){
+            $data['FirstName'] = $card->getFirstName();
+        }
+
+        if ($card->getLastName()) {
+            $data['LastName'] = $card->getLastName();
+        }
+
 
         return $data;
     }

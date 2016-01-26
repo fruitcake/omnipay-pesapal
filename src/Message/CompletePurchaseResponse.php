@@ -11,6 +11,14 @@ use Omnipay\Common\Message\RequestInterface;
  */
 class CompletePurchaseResponse extends AbstractResponse
 {
+    public function __construct(RequestInterface $request, $data)
+    {
+        // Parse string
+        parse_str($data, $data);
+
+        parent::__construct($request, $data);
+    }
+
     public function isSuccessful()
     {
         return $this->getCode() == 'COMPLETED';
