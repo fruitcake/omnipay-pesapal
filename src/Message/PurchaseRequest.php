@@ -29,7 +29,7 @@ class PurchaseRequest extends AbstractRequest
                 /** @var Item $item */
                 foreach ($value as $item) {
                     $line = $lineItems->addChild('LineItem');
-                    $line->addAttribute('UniqueId', 1);
+                    $line->addAttribute('UniqueId', $item->getName());
                     $line->addAttribute('Particulars', $item->getDescription());
                     $line->addAttribute('Quantity', (int) $item->getQuantity());
                     $line->addAttribute('UnitCost', number_format($item->getPrice(), 2));
