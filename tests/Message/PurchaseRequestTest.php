@@ -26,10 +26,12 @@ class PurchaseRequestTest extends TestCase
                 'description' => 'Test payment 1',
                 'transactionId' => '1234',
                 'items' => [
-                    'name' => 'product',
-                    'description' => 'My product',
-                    'quantity' => 1,
-                    'price' => 10,
+                    [
+                        'name' => 'product',
+                        'description' => 'My product',
+                        'quantity' => 1,
+                        'price' => 10,
+                    ]
                 ]
             )
         );
