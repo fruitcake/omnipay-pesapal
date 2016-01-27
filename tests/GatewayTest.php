@@ -18,6 +18,7 @@ class GatewayTest extends GatewayTestCase
             'secret' => 'my-secret',
             'type' => 'ORDER',
             'testMode' => false,
+            'description' => 'My order',
         ));
 
         $this->options = array(
@@ -34,6 +35,7 @@ class GatewayTest extends GatewayTestCase
         $this->assertEquals('my-secret', $this->gateway->getSecret());
         $this->assertEquals('ORDER', $this->gateway->getType());
         $this->assertFalse($this->gateway->getTestMode());
+        $this->assertEquals('My order', $this->gateway->getDescription());
     }
 
     public function testPurchase()

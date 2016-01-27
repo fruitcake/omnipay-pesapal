@@ -39,39 +39,7 @@ class PurchaseRequestTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Omnipay\Common\Exception\InvalidRequestException
-     * @expectedExceptionMessage The key parameter is required
-     */
-    public function testMissingParameters()
-    {
-        $request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
-
-        $request->getData();
-    }
-
-    /**
-     * @expectedException \Omnipay\Common\Exception\InvalidRequestException
-     * @expectedExceptionMessage A phonenumber or email is required
-     */
-    public function testMissingEmailPhone()
-    {
-        $request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request->initialize(
-            array(
-                'key' => 'my-key',
-                'secret' => 'my-secret',
-                'amount' => '10.00',
-                'card' => array(
-                    'firstName' => 'Name'
-                ),
-            )
-        );
-
-        $request->getData();
-    }
-
-    public function testDefaultParameters()
+      public function testDefaultParameters()
     {
         $request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
         $request->initialize(
@@ -175,5 +143,37 @@ class PurchaseRequestTest extends TestCase
         $url = $this->request->send()->getData();
 
         $this->assertStringStartsWith('http://demo.pesapal.com/API/PostPesapalDirectOrderV4', $url);
+    }
+
+    /**
+     * @expectedException \Omnipay\Common\Exception\InvalidRequestException
+     * @expectedExceptionMessage The key parameter is required
+     */
+    public function testMissingParameters()
+    {
+        $request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+
+        $request->getData();
+    }
+
+    /**
+     * @expectedException \Omnipay\Common\Exception\InvalidRequestException
+     * @expectedExceptionMessage A phonenumber or email is required
+     */
+    public function testMissingEmailPhone()
+    {
+        $request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+        $request->initialize(
+            array(
+                'key' => 'my-key',
+                'secret' => 'my-secret',
+                'amount' => '10.00',
+                'card' => array(
+                    'firstName' => 'Name'
+                ),
+            )
+        );
+
+        $request->getData();
     }
 }
