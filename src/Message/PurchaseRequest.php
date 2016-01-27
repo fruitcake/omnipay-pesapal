@@ -45,16 +45,10 @@ class PurchaseRequest extends AbstractRequest
             throw new InvalidRequestException("A phonenumber or email is required");
         }
 
-        if ( ! $this->getTransactionReference()) {
-            // Create an unique reference
-            $this->setTransactionReference(md5(uniqid(true)));
-        }
-
         $data = array(
             'Amount' => $this->getAmount(),
             'Description' => $this->getDescription(),
             'Type' => $this->getType(),
-            'Reference' => $this->getTransactionReference(),
         );
 
         if ($this->getCurrency()) {
@@ -75,6 +69,14 @@ class PurchaseRequest extends AbstractRequest
         if ($card->getLastName()) {
             $data['LastName'] = $card->getLastName();
         }
+
+        if ( ! $this->getTransactionReference()) {
+            // Create an unique reference based on the data + time
+            $reference = sha1(uniqid(serialize($data), true));
+            $this->setTransactionReference($reference);
+        }
+
+        $data['Reference'] = $this->getTransactionReference();
 
         return $data;
     }
