@@ -34,52 +34,84 @@ For general usage instructions, please see the main [Omnipay](https://github.com
 
 ## Example
 
+bootstrap.php
+
 ```php
- $gateway = \Omnipay\Omnipay::create('Pesapal');
-    $gateway->initialize(array(
-        'key' => 'your-consumer-key',
-        'secret' => 'your-consumer-secret',
-        'testMode' => false,
-    ));
+require 'vendor/autoload.php';
 
-    // Start the purchase
-    if(!isset($_GET['pesapal_merchant_reference'])){
-        // Send back to this URL
-        $url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+$gateway = \Omnipay\Omnipay::create('Pesapal');
+$gateway->initialize(array(
+    'key' => 'your-consumer-key',
+    'secret' => 'your-consumer-secret',
+    'testMode' => false,
+));
+```
 
-        // Make a purchase request
-        $response = $gateway->purchase(array(
-            'amount' => "6.84",
-            'description' => "Testorder #1234",
-            'currency' => 'USD',
-            'card' => array(
-                'email' => 'barry@fruitcakestudio.nl',
-                'firstName' => 'Barry',
-                'lastName' => 'vd. Heuvel',
-                'phone' => '+1234567890',
-            ),
-            'returnUrl' => $url,
-        ))->send();
+purchase.php
 
-        $transactionId = $response->getTransactionId();
+```php
+require 'bootstrap.php';
 
-        if ($response->isRedirect()) {
-            // redirect to offsite payment gateway
-            $response->redirect();
-        } else {
-            // payment failed: display message to customer
-            return "Error " .$response->getCode() . ': ' . $response->getMessage();
-        }
-    } else {
-        // Check the payment status
-        $response = $gateway->completePurchase()->send();
-        if($response->isSuccessful()){
-            $reference = $response->getTransactionReference();  // TODO; Check the reference/id with your database
-            return "Transaction '" . $response->getTransactionId() . "' succeeded!";
-        } else {
-            return "Status: " .$response->getCode() . ': ' . $response->getMessage();
-        }
-    }
+// Make a purchase request
+$response = $gateway->purchase(array(
+    'amount' => "6.84",
+    'description' => "Testorder #1234",
+    'currency' => 'USD',
+    'card' => array(
+        'email' => 'barry@fruitcakestudio.nl',
+        'firstName' => 'Barry',
+        'lastName' => 'vd. Heuvel',
+        'phone' => '+1234567890',
+    ),
+    'returnUrl' => 'http://my-domain.com/return.php',
+))->send();
+
+$transactionId = $response->getTransactionId();
+
+if ($response->isRedirect()) {
+    // redirect to offsite payment gateway
+    $response->redirect();
+} else {
+    // payment failed: display message to customer
+    echo "Error " .$response->getCode() . ': ' . $response->getMessage();
+}
+```
+
+return.php
+
+```php
+require 'bootstrap.php';
+
+// Check the payment status
+$response = $gateway->completePurchase()->send();
+
+// Show status to user
+if ($response->isSuccessful()) {
+   return "Transaction '" . $response->getTransactionId() . "' succeeded!";
+} else {
+    return "Status: " .$response->getCode() . ': ' . $response->getMessage();
+}
+
+echo $response->getNotificationMessage();   // Or ->getNotificationResponse() for Symfony Response
+```
+
+notify.php
+
+```php
+require 'bootstrap.php';
+
+// Check the payment status
+$response = $gateway->completePurchase()->send();
+
+$reference = $response->getTransactionReference();  // TODO; Check the reference/id with your database
+$transactionId = $response->getTransactionId();
+
+if($response->isSuccessful()){
+   // Save state
+}
+
+// Return message for the gateway
+echo $response->getNotificationMessage();   // Or ->getNotificationResponse() for Symfony Response
 ```
 
 The transactionReference is `pesapal_transaction_tracking_id`, which is set by Pesapal.

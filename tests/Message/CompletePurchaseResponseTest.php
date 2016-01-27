@@ -93,9 +93,12 @@ class CompletePurchaseResponseTest extends TestCase
         $httpResponse = $this->getMockHttpResponse('CompletePurchaseCompleted.txt');
         $response = new CompletePurchaseResponse($request, $httpResponse->getBody());
 
-        parse_str($response->getAnswer(), $data);
+        parse_str($response->getNotificationMessage(), $data);
         $this->assertEquals('CHANGE', $data['pesapal_notification_type']);
         $this->assertEquals('550e8400-e29b-41d4-a716-446655440000', $data['pesapal_transaction_tracking_id']);
         $this->assertEquals('1f3870be274f6c49b3e31a0c6728957f', $data['pesapal_merchant_reference']);
+
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response->getNotificationResponse());
+        $this->assertEquals($response->getNotificationMessage(), $response->getNotificationResponse()->getContent());
     }
 }

@@ -5,6 +5,7 @@ namespace Omnipay\Pesapal\Message;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RedirectResponseInterface;
 use Omnipay\Common\Message\RequestInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Response
@@ -45,7 +46,12 @@ class CompletePurchaseResponse extends AbstractResponse
         return $this->getCode() == 'FAILED';
     }
 
-    public function getAnswer()
+    public function getNotificationResponse()
+    {
+        return Response::create($this->getNotificationMessage());
+    }
+
+    public function getNotificationMessage()
     {
         return http_build_query(array(
             'pesapal_notification_type' => $this->request->getNotificationType(),
