@@ -2,6 +2,8 @@
 namespace Omnipay\Pesapal\Message;
 
 use Omnipay\Common\Exception\InvalidRequestException;
+use Omnipay\Common\Item;
+use Omnipay\Common\ItemBag;
 
 /**
  * Purchase Request
@@ -20,7 +22,22 @@ class PurchaseRequest extends AbstractRequest
     xmlns="http://www.pesapal.com"
 />');
         foreach ($data as $key => $value) {
-            $xml->addAttribute($key, $value);
+
+            if ($key == 'LineItems' && $value instanceof ItemBag) {
+                $lineItems = $xml->addChild('LineItems');
+
+                /** @var Item $item */
+                foreach ($value as $item) {
+                    $line = $lineItems->addChild('LineItem');
+                    $line->addAttribute('UniqueId', 1);
+                    $line->addAttribute('Particulars', $item->getDescription());
+                    $line->addAttribute('Quantity', (int) $item->getQuantity());
+                    $line->addAttribute('UnitCost', number_format($item->getPrice(), 2));
+                    $line->addAttribute('SubTotal', number_format($item->getQuantity() * $item->getPrice(), 2));
+                }
+            } else {
+                $xml->addAttribute($key, $value);
+            }
         }
 
         $url = $this->createSignedUrl(array(
@@ -64,6 +81,10 @@ class PurchaseRequest extends AbstractRequest
 
         if ($card->getLastName()) {
             $data['LastName'] = $card->getLastName();
+        }
+
+        if ($this->getItems()) {
+            $data['LineItems'] = $this->getItems();
         }
 
         if ( ! $this->getTransactionId()) {
