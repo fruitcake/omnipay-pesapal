@@ -86,6 +86,18 @@ or the transactionId and transactionReference are set as parameters. **
 
 See the documentation on [http://developer.pesapal.com/how-to-integrate/step-by-step](http://developer.pesapal.com/how-to-integrate/step-by-step)
 
+### Sandbox / Demo
+
+When you set `testMode` to `true`, the [Demo sandbox](http://demo.pesapal.com/) will be used.
+
+You need a different consumer key/secret. Follow these steps to use the testMode:
+
+ - Create a *business* account on [http://demo.pesapal.com/](http://demo.pesapal.com/)
+ - Login to your demo account, the key/secret are on the dashboard.
+ - Start a transaction and [send dummy money](http://demo.pesapal.com/MobileMoneyTest)
+ - Use the same phonenumber (eg. `700123456`) and amount. Copy the confirmation code after submitting.
+
+
 ## Support
 
 If you are having general issues with Omnipay, we suggest posting on

@@ -67,4 +67,17 @@ class CompletePurchaseResponseTest extends TestCase
         $this->assertEquals('PENDING', $response->getCode());
         $this->assertNull($response->getMessage());
     }
+
+    public function testCompletePurchaseError()
+    {
+        $httpResponse = $this->getMockHttpResponse('CompletePurchaseError.txt');
+        $response = new CompletePurchaseResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isPending());
+
+
+        $this->assertEquals('ERROR', $response->getCode());
+        $this->assertEquals('Problem: consumer_key_unknown | Advice: >  |', $response->getMessage());
+    }
 }

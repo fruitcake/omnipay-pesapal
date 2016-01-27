@@ -16,12 +16,18 @@ class CompletePurchaseResponse extends AbstractResponse
         // Parse string into parameters
         parse_str($dataStr, $data);
 
-        $status = $data['pesapal_response_data'];
-        if (strpos($status, ',') !== false) {
-            list($transaction_id, $payment_method, $status, $transaction_reference) = str_getcsv($status);
+        if ( ! isset($data['pesapal_response_data'])) {
+            $status = 'ERROR';
+            $message = (string) $dataStr;
+        } else {
+            $status = $data['pesapal_response_data'];
+            if (strpos($status, ',') !== false) {
+                list($transaction_id, $payment_method, $status, $transaction_reference) = str_getcsv($status);
+            }
         }
 
-        parent::__construct($request, compact('status','transaction_id', 'payment_method', 'transaction_reference'));
+        $data = compact('status','transaction_id', 'payment_method', 'transaction_reference', 'message');
+        parent::__construct($request, $data);
     }
 
     public function isSuccessful()
@@ -73,6 +79,13 @@ class CompletePurchaseResponse extends AbstractResponse
     {
         if (isset($this->data['payment_method'])) {
             return $this->data['payment_method'];
+        }
+    }
+
+    public function getMessage()
+    {
+        if (isset($this->data['message'])) {
+            return $this->data['message'];
         }
     }
 }
