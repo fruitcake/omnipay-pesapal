@@ -62,7 +62,6 @@ abstract class AbstractRequest extends BaseAbstractRequest
 
         $response = $this->httpClient->get($url)->send();
 
-        die((string) $response);
         return $this->createResponse($response->getBody(true));
     }
 

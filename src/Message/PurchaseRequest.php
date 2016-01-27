@@ -32,7 +32,6 @@ class PurchaseRequest extends AbstractRequest
             'oauth_callback' => $this->getReturnUrl(),
             ));
 
-
         return $this->createResponse($url);
     }
 
