@@ -32,6 +32,60 @@ The following gateways are provided by this package:
 
 For general usage instructions, please see the main [Omnipay](https://github.com/thephpleague/omnipay) repository.
 
+## Example
+
+```php
+ $gateway = \Omnipay\Omnipay::create('Pesapal');
+    $gateway->initialize(array(
+        'key' => 'your-consumer-key',
+        'secret' => 'your-consumer-secret',
+        'testMode' => false,
+    ));
+
+    // Start the purchase
+    if(!isset($_GET['pesapal_merchant_reference'])){
+        // Send back to this URL
+        $url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+
+        // Make a purchase request
+        $response = $gateway->purchase(array(
+            'amount' => "6.84",
+            'description' => "Testorder #1234",
+            'currency' => 'USD',
+            'card' => array(
+                'email' => 'barry@fruitcakestudio.nl',
+                'firstName' => 'Barry',
+                'lastName' => 'vd. Heuvel',
+                'phone' => '+1234567890',
+            ),
+            'returnUrl' => $url,
+        ))->send();
+
+        if ($response->isRedirect()) {
+            // redirect to offsite payment gateway
+            $response->redirect();
+        } else {
+            // payment failed: display message to customer
+            return "Error " .$response->getCode() . ': ' . $response->getMessage();
+        }
+    } else {
+        // Check the status
+        $response = $gateway->completePurchase()->send();
+        if($response->isSuccessful()){
+            $reference = $response->getTransactionReference();  // TODO; Check the reference/id with your database
+            return "Transaction '" . $response->getTransactionId() . "' succeeded!";
+        } else {
+            return "Status: " .$response->getCode() . ': ' . $response->getMessage();
+        }
+    }
+```
+
+**Note, transactionReference, transactionId and paymentMethod are only available in the CompletePurchaseResponse
+when both `pesapal_transaction_tracking_id` and `pesapal_merchant_reference` are set in the query,
+or the transactionId and transactionReference are set as parameters. **
+
+See the documentation on [http://developer.pesapal.com/how-to-integrate/step-by-step](http://developer.pesapal.com/how-to-integrate/step-by-step)
+
 ## Support
 
 If you are having general issues with Omnipay, we suggest posting on

@@ -54,7 +54,6 @@ class CompletePurchaseResponseTest extends TestCase
 
         $this->assertEquals('FAILED', $response->getCode());
         $this->assertNull($response->getMessage());
-
     }
 
     public function testCompletePurchasePending()

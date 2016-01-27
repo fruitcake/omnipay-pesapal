@@ -1,20 +1,7 @@
 # Changelog
 
-All Notable changes to `:package_name` will be documented in this file
+All Notable changes to omnipay-pesapal will be documented in this file
 
-## NEXT - YYYY-MM-DD
+## 2015-01-27
 
-### Added
-- Nothing
-
-### Deprecated
-- Nothing
-
-### Fixed
-- Nothing
-
-### Removed
-- Nothing
-
-### Security
-- Nothing
+ * Initial commit

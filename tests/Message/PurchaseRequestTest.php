@@ -23,6 +23,7 @@ class PurchaseRequestTest extends TestCase
                 'secret' => 'my-secret',
                 'amount' => '10.00',
                 'card'  => $this->getValidCard(),
+                'description' => 'Test payment 1',
             )
         );
     }
@@ -40,5 +41,6 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame('info@example.com', $data['Email']);
         $this->assertSame('(555) 123-4567', $data['PhoneNumber']);
         $this->assertSame('10.00', $data['Amount']);
+        $this->assertSame('Test payment 1', $data['Description']);
     }
 }

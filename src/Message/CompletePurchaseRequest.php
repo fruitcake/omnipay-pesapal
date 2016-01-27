@@ -1,8 +1,6 @@
 <?php
 namespace Omnipay\Pesapal\Message;
 
-use Omnipay\Common\Exception\InvalidRequestException;
-
 /**
  * CompletePurchase Request
  *
