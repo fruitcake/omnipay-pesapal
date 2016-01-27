@@ -21,7 +21,7 @@ PSRs you support to avoid any confusion with users and contributors.
 Via Composer
 
 ``` bash
-$ composer require fruitcakestudio/omnipay-pesapal
+$ composer require fruitcakestudio/omnipay-pesapal:"1.x@alpha"
 ```
 
 ## Usage
