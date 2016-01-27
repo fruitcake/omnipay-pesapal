@@ -78,6 +78,7 @@ class PurchaseRequest extends AbstractRequest
         if ($card->getEmail()) {
             $data['Email'] = $this->getCard()->getEmail();
         }
+
         if ($card->getPhone()) {
             $data['PhoneNumber'] = $this->getCard()->getPhone();
         }

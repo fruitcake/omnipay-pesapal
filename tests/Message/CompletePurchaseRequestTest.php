@@ -16,12 +16,12 @@ class CompletePurchaseRequestTest extends TestCase
     {
         parent::setUp();
 
-        $httpRequest = $this->getHttpRequest();
+        $httpRequest = clone $this->getHttpRequest();
         $httpRequest->query->set('pesapal_merchant_reference', '001');
         $httpRequest->query->set('pesapal_transaction_tracking_id', 'abc');
         $httpRequest->query->set('pesapal_notification_type', 'CHANGE');
 
-        $this->request = new CompletePurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+        $this->request = new CompletePurchaseRequest($this->getHttpClient(), $httpRequest);
         $this->request->initialize(
             array(
                 'key' => 'my-key',
@@ -41,4 +41,33 @@ class CompletePurchaseRequestTest extends TestCase
         $this->assertSame('001', $this->request->getTransactionId());
         $this->assertSame('CHANGE', $this->request->getNotificationType());
     }
+
+    /**
+     * @expectedException \Omnipay\Common\Exception\InvalidRequestException
+     * @expectedExceptionMessage The key parameter is required
+     */
+    public function testMissingParameters()
+    {
+        $request = new CompletePurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+
+        $request->getData();
+    }
+
+    /**
+     * @expectedException \Omnipay\Common\Exception\InvalidRequestException
+     * @expectedExceptionMessage A transactionId is required
+     */
+    public function testMissingTransactionId()
+    {
+        $request = new CompletePurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+        $request->initialize(
+            array(
+                'key' => 'my-key',
+                'secret' => 'my-secret',
+            )
+        );
+
+        $request->getData();
+    }
+
 }
