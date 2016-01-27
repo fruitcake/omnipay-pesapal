@@ -53,5 +53,31 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame('1234', $data['Reference']);
         $this->assertInstanceOf('\Omnipay\Common\ItemBag', $data['LineItems']);
         $this->assertEquals(1, $data['LineItems']->count());
+
+    }
+
+    public function testValidXml()
+    {
+        $card = new CreditCard($this->getValidCard());
+        $card->setEmail('info@example.com');
+
+        $this->request->setCard($card);
+
+        $data = $this->request->getData();
+
+        $xml = $this->request->createXml($data);
+
+        $doc = simplexml_load_string($xml);
+
+        $this->assertInstanceOf('\SimpleXMLElement', $doc);
+        $this->assertEquals('PesapalDirectOrderInfo', $doc->getName());
+
+        $attributes = $doc->attributes();
+        $this->assertEquals(8, $attributes->count());
+        $this->assertEquals('info@example.com', $attributes['Email']);
+        $this->assertEquals('(555) 123-4567', $attributes['PhoneNumber']);
+        $this->assertEquals('10.00', $attributes['Amount']);
+        $this->assertEquals('Test payment 1', $attributes['Description']);
+        $this->assertEquals('1234', $attributes['Reference']);
     }
 }

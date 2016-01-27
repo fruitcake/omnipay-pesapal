@@ -14,7 +14,7 @@ class PurchaseRequest extends AbstractRequest
 {
     protected $resource = 'PostPesapalDirectOrderV4';
 
-    public function sendData($data)
+    public function createXml($data)
     {
         $xml = new \SimpleXMLElement('<PesapalDirectOrderInfo
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -40,8 +40,15 @@ class PurchaseRequest extends AbstractRequest
             }
         }
 
+        return $xml->asXML();
+    }
+
+    public function sendData($data)
+    {
+        $xml = $this->createXml($data);
+
         $url = $this->createSignedUrl(array(
-            'pesapal_request_data' => htmlentities($xml->asXML()),
+            'pesapal_request_data' => htmlentities($xml),
             'oauth_callback' => $this->getReturnUrl(),
             ));
 
