@@ -67,8 +67,13 @@ class PurchaseRequestTest extends TestCase
 
         $xml = $this->request->createXml($data);
 
-        $doc = simplexml_load_string($xml);
+        // Validate against XSD
+        $doc = new \DOMDocument();
+        $doc->loadXML($xml);
+        $this->assertTrue($doc->schemaValidate(__DIR__ . '/../../schema.xsd'));
 
+        // Validate attribute values
+        $doc = simplexml_load_string($xml);
         $this->assertInstanceOf('\SimpleXMLElement', $doc);
         $this->assertEquals('PesapalDirectOrderInfo', $doc->getName());
 

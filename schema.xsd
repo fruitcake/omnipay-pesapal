@@ -1,0 +1,65 @@
+<!--?xml version="1.0" encoding="utf-8" ?-->
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified"
+           targetNamespace="http://www.pesapal.com">
+    <xsd:element name="PesapalDirectOrderInfo">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="LineItems" minOccurs="0" maxOccurs="1">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element minOccurs="1" maxOccurs="unbounded" name="LineItem">
+                                <xsd:complexType>
+                                    <xsd:attribute name="UniqueId" type="xsd:string" use="required">
+                                    </xsd:attribute>
+                                    <xsd:attribute name="Particulars" type="xsd:string" use="required">
+                                    </xsd:attribute>
+                                    <xsd:attribute name="Quantity" type="xsd:unsignedInt" use="required">
+                                    </xsd:attribute>
+                                    <xsd:attribute name="UnitCost" type="xsd:decimal" use="required">
+                                    </xsd:attribute>
+                                    <xsd:attribute name="SubTotal" type="xsd:decimal" use="required">
+                                    </xsd:attribute>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="Amount" type="xsd:decimal" use="required">
+            </xsd:attribute>
+            <xsd:attribute name="Currency" use="optional">
+                <xsd:simpleType>
+                    <xsd:restriction base="xs:string">
+                        <xsd:pattern value="[A-Za-z][A-Za-z][A-Za-z]">
+                        </xsd:pattern>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+            <xsd:attribute name="Description" type="xsd:string" use="required">
+            </xsd:attribute>
+            <xsd:attribute name="Type" use="required">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="MERCHANT">
+                        </xsd:enumeration>
+                        <xsd:enumeration value="ORDER">
+                        </xsd:enumeration>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+            <xsd:attribute name="Reference" type="xsd:string" use="required">
+            </xsd:attribute>
+            <xsd:attribute name="FirstName" type="xsd:string" use="optional">
+            </xsd:attribute>
+            <xsd:attribute name="LastName" type="xsd:string" use="optional">
+            </xsd:attribute>
+            <xsd:attribute name="Email" type="xsd:string" use="required">
+            </xsd:attribute>
+            <xsd:attribute name="PhoneNumber" type="xsd:string" use="optional">
+            </xsd:attribute>
+            <xsd:attribute name="AccountNumber" type="xsd:string" use="optional">
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+</xs:schema>

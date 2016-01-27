@@ -67,8 +67,8 @@ class PurchaseRequest extends AbstractRequest
 
         $data = array(
             'Amount' => $this->getAmount(),
-            'Description' => $this->getDescription(),
-            'Type' => $this->getType(),
+            'Description' => $this->getDescription() ?: 'Order payment',
+            'Type' => $this->getType() ?: 'MERCHANT',
         );
 
         if ($this->getCurrency()) {
