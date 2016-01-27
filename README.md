@@ -35,7 +35,6 @@ For general usage instructions, please see the main [Omnipay](https://github.com
 ## Example
 
 bootstrap.php
-
 ```php
 require 'vendor/autoload.php';
 
@@ -48,7 +47,6 @@ $gateway->initialize(array(
 ```
 
 purchase.php
-
 ```php
 require 'bootstrap.php';
 
@@ -78,7 +76,6 @@ if ($response->isRedirect()) {
 ```
 
 return.php
-
 ```php
 require 'bootstrap.php';
 
@@ -87,16 +84,13 @@ $response = $gateway->completePurchase()->send();
 
 // Show status to user
 if ($response->isSuccessful()) {
-   return "Transaction '" . $response->getTransactionId() . "' succeeded!";
+    echo "Transaction '" . $response->getTransactionId() . "' succeeded!";
 } else {
-    return "Status: " .$response->getCode() . ': ' . $response->getMessage();
+    echo "Status: " .$response->getCode() . ': ' . $response->getMessage();
 }
-
-echo $response->getNotificationMessage();   // Or ->getNotificationResponse() for Symfony Response
 ```
 
 notify.php
-
 ```php
 require 'bootstrap.php';
 
@@ -115,7 +109,7 @@ echo $response->getNotificationMessage();   // Or ->getNotificationResponse() fo
 ```
 
 The transactionReference is `pesapal_transaction_tracking_id`, which is set by Pesapal.
-the transactionId is your own id (`pesapal_merchant_reference`), which will be generated if not provided.
+The transactionId is your own id (`pesapal_merchant_reference`), which will be generated if not provided.
 
 See the documentation on [http://developer.pesapal.com/how-to-integrate/step-by-step](http://developer.pesapal.com/how-to-integrate/step-by-step)
 
