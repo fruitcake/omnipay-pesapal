@@ -22,7 +22,7 @@ class CompletePurchaseResponse extends AbstractResponse
         } else {
             $status = $data['pesapal_response_data'];
             if (strpos($status, ',') !== false) {
-                list($transaction_id, $payment_method, $status, $transaction_reference) = str_getcsv($status);
+                list($transaction_reference, $payment_method, $status, $transaction_id) = str_getcsv($status);
             }
         }
 
@@ -49,8 +49,8 @@ class CompletePurchaseResponse extends AbstractResponse
     {
         return http_build_query(array(
             'pesapal_notification_type' => $this->request->getNotificationType(),
-            'pesapal_transaction_tracking_id' => $this->getTransactionId(),
-            'pesapal_merchant_reference' => $this->getTransactionReference(),
+            'pesapal_transaction_tracking_id' => $this->getTransactionReference(),
+            'pesapal_merchant_reference' => $this->getTransactionId(),
         ));
     }
 
@@ -61,17 +61,17 @@ class CompletePurchaseResponse extends AbstractResponse
         }
     }
 
-    public function getTransactionId()
-    {
-        if (isset($this->data['transaction_id'])) {
-            return $this->data['transaction_id'];
-        }
-    }
-
     public function getTransactionReference()
     {
         if (isset($this->data['transaction_reference'])) {
             return $this->data['transaction_reference'];
+        }
+    }
+
+    public function getTransactionId()
+    {
+        if (isset($this->data['transaction_id'])) {
+            return $this->data['transaction_id'];
         }
     }
 

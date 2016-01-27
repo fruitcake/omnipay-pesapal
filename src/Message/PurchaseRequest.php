@@ -70,13 +70,11 @@ class PurchaseRequest extends AbstractRequest
             $data['LastName'] = $card->getLastName();
         }
 
-        if ( ! $this->getTransactionReference()) {
-            // Create an unique reference based on the data + time
-            $reference = sha1(uniqid(serialize($data), true));
-            $this->setTransactionReference($reference);
+        if ( ! $this->getTransactionId()) {
+            $this->setTransactionId(uniqid('', true));
         }
 
-        $data['Reference'] = $this->getTransactionReference();
+        $data['Reference'] = $this->getTransactionId();
 
         return $data;
     }

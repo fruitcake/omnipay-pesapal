@@ -61,6 +61,8 @@ For general usage instructions, please see the main [Omnipay](https://github.com
             'returnUrl' => $url,
         ))->send();
 
+        $transactionId = $response->getTransactionId();
+
         if ($response->isRedirect()) {
             // redirect to offsite payment gateway
             $response->redirect();
@@ -69,7 +71,7 @@ For general usage instructions, please see the main [Omnipay](https://github.com
             return "Error " .$response->getCode() . ': ' . $response->getMessage();
         }
     } else {
-        // Check the status
+        // Check the payment status
         $response = $gateway->completePurchase()->send();
         if($response->isSuccessful()){
             $reference = $response->getTransactionReference();  // TODO; Check the reference/id with your database
@@ -79,6 +81,9 @@ For general usage instructions, please see the main [Omnipay](https://github.com
         }
     }
 ```
+
+The transactionReference is `pesapal_transaction_tracking_id`, which is set by Pesapal.
+the transactionId is your own id (`pesapal_merchant_reference`), which will be generated if not provided.
 
 **Note, transactionReference, transactionId and paymentMethod are only available in the CompletePurchaseResponse
 when both `pesapal_transaction_tracking_id` and `pesapal_merchant_reference` are set in the query,

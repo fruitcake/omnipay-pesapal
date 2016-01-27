@@ -32,7 +32,7 @@ class GatewayTest extends GatewayTestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertTrue($response->isRedirect());
-        $this->assertNotEmpty($response->getTransactionReference());
+        $this->assertNotEmpty($response->getTransactionId());
         $this->assertNull($response->getMessage());
     }
 }

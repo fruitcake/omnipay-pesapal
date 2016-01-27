@@ -24,6 +24,7 @@ class PurchaseRequestTest extends TestCase
                 'amount' => '10.00',
                 'card'  => $this->getValidCard(),
                 'description' => 'Test payment 1',
+                'transactionId' => '1234',
             )
         );
     }
@@ -34,7 +35,6 @@ class PurchaseRequestTest extends TestCase
         $card->setEmail('info@example.com');
 
         $this->request->setCard($card);
-        $this->request->setTransactionId('abc123');
 
         $data = $this->request->getData();
 
@@ -42,5 +42,6 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame('(555) 123-4567', $data['PhoneNumber']);
         $this->assertSame('10.00', $data['Amount']);
         $this->assertSame('Test payment 1', $data['Description']);
+        $this->assertSame('1234', $data['Reference']);
     }
 }

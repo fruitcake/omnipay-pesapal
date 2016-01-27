@@ -23,11 +23,11 @@ class CompletePurchaseRequest extends AbstractRequest
         $this->validate('key', 'secret');
 
         $data = array(
-            'pesapal_merchant_reference' => $this->getTransactionReference(),
+            'pesapal_merchant_reference' => $this->getTransactionId(),
         );
 
-        if ($this->getTransactionId()) {
-            $data['pesapal_transaction_tracking_id'] = $this->getTransactionId();
+        if ($this->getTransactionReference()) {
+            $data['pesapal_transaction_tracking_id'] = $this->getTransactionReference();
         }
 
         return $data;
@@ -38,12 +38,12 @@ class CompletePurchaseRequest extends AbstractRequest
         return $this->httpRequest->query->get('pesapal_notification_type');
     }
 
-    public function getTransactionReference()
+    public function getTransactionId()
     {
-        return $this->getParameter('transaction_reference') ?: $this->httpRequest->query->get('pesapal_merchant_reference');
+        return $this->getParameter('transaction_id') ?: $this->httpRequest->query->get('pesapal_merchant_reference');
     }
 
-    public function getTransactionId()
+    public function getTransactionReference()
     {
         return $this->httpRequest->query->get('pesapal_transaction_tracking_id');
     }
