@@ -21,9 +21,12 @@ class CompletePurchaseResponseTest extends TestCase
         $response = new CompletePurchaseResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isPending());
         $this->assertEquals('COMPLETED', $response->getCode());
         $this->assertNull($response->getMessage());
-        $this->assertFalse($response->isPending());
+        $this->assertEquals('1f3870be274f6c49b3e31a0c6728957f', $response->getTransactionReference());
+        $this->assertEquals('550e8400-e29b-41d4-a716-446655440000', $response->getTransactionId());
+        $this->assertEquals('MPESA', $response->getPaymentMethod());
     }
 
     public function testCompletePurchaseInvalid()
@@ -32,9 +35,13 @@ class CompletePurchaseResponseTest extends TestCase
         $response = new CompletePurchaseResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isPending());
+
         $this->assertEquals('INVALID', $response->getCode());
         $this->assertNull($response->getMessage());
-        $this->assertFalse($response->isPending());
+        $this->assertNull($response->getTransactionId());
+        $this->assertNull($response->getTransactionReference());
+        $this->assertNull($response->getPaymentMethod());
     }
 
     public function testCompletePurchaseFailed()
@@ -43,9 +50,11 @@ class CompletePurchaseResponseTest extends TestCase
         $response = new CompletePurchaseResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isPending());
+
         $this->assertEquals('FAILED', $response->getCode());
         $this->assertNull($response->getMessage());
-        $this->assertFalse($response->isPending());
+
     }
 
     public function testCompletePurchasePending()
@@ -54,8 +63,9 @@ class CompletePurchaseResponseTest extends TestCase
         $response = new CompletePurchaseResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
+        $this->assertTrue($response->isPending());
+
         $this->assertEquals('PENDING', $response->getCode());
         $this->assertNull($response->getMessage());
-        $this->assertTrue($response->isPending());
     }
 }

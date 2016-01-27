@@ -16,7 +16,12 @@ class CompletePurchaseResponse extends AbstractResponse
         // Parse string into parameters
         parse_str($dataStr, $data);
 
-        parent::__construct($request, $data);
+        $status = $data['pesapal_response_data'];
+        if (strpos($status, ',') !== false) {
+            list($transaction_id, $payment_method, $status, $transaction_reference) = str_getcsv($status);
+        }
+
+        parent::__construct($request, compact('status','transaction_id', 'payment_method', 'transaction_reference'));
     }
 
     public function isSuccessful()
@@ -45,18 +50,29 @@ class CompletePurchaseResponse extends AbstractResponse
 
     public function getCode()
     {
-        if (isset($this->data['pesapal_response_data'])) {
-            return $this->data['pesapal_response_data'];
+        if (isset($this->data['status'])) {
+            return $this->data['status'];
         }
     }
 
     public function getTransactionId()
     {
-        return $this->request->getTransactionId();
+        if (isset($this->data['transaction_id'])) {
+            return $this->data['transaction_id'];
+        }
     }
 
     public function getTransactionReference()
     {
-        return $this->request->getTransactionReference();
+        if (isset($this->data['transaction_reference'])) {
+            return $this->data['transaction_reference'];
+        }
+    }
+
+    public function getPaymentMethod()
+    {
+        if (isset($this->data['payment_method'])) {
+            return $this->data['payment_method'];
+        }
     }
 }

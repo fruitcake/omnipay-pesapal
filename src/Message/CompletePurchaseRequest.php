@@ -13,7 +13,7 @@ class CompletePurchaseRequest extends AbstractRequest
     function getResource()
     {
         if ($this->getTransactionId()) {
-            return 'QueryPaymentStatus';
+            return 'QueryPaymentDetails';
         }
 
         return 'QueryPaymentStatusByMerchantRef';

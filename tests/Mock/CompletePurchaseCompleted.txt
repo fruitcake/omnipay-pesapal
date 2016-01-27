@@ -1,4 +1,4 @@
 HTTP/1.1 200 OK
 Content-Type: text/html; charset=utf-8
 
-pesapal_response_data=COMPLETED
+pesapal_response_data=550e8400-e29b-41d4-a716-446655440000,MPESA,COMPLETED,1f3870be274f6c49b3e31a0c6728957f
