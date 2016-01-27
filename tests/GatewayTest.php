@@ -16,6 +16,8 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->initialize(array(
             'key' => 'my-key',
             'secret' => 'my-secret',
+            'type' => 'ORDER',
+            'testMode' => false,
         ));
 
         $this->options = array(
@@ -24,6 +26,14 @@ class GatewayTest extends GatewayTestCase
                 'email' => 'test@example.com',
             )),
         );
+    }
+
+    public function testParameters()
+    {
+        $this->assertEquals('my-key', $this->gateway->getKey());
+        $this->assertEquals('my-secret', $this->gateway->getSecret());
+        $this->assertEquals('ORDER', $this->gateway->getType());
+        $this->assertFalse($this->gateway->getTestMode());
     }
 
     public function testPurchase()

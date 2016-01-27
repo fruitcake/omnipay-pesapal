@@ -27,6 +27,7 @@ class CompletePurchaseResponseTest extends TestCase
         $this->assertEquals('1f3870be274f6c49b3e31a0c6728957f', $response->getTransactionId());
         $this->assertEquals('550e8400-e29b-41d4-a716-446655440000', $response->getTransactionReference());
         $this->assertEquals('MPESA', $response->getPaymentMethod());
+
     }
 
     public function testCompletePurchaseInvalid()
@@ -36,6 +37,7 @@ class CompletePurchaseResponseTest extends TestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isPending());
+        $this->assertFalse($response->isFailed());
 
         $this->assertEquals('INVALID', $response->getCode());
         $this->assertNull($response->getMessage());
@@ -51,6 +53,7 @@ class CompletePurchaseResponseTest extends TestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isPending());
+        $this->assertTrue($response->isFailed());
 
         $this->assertEquals('FAILED', $response->getCode());
         $this->assertNull($response->getMessage());
@@ -63,6 +66,7 @@ class CompletePurchaseResponseTest extends TestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertTrue($response->isPending());
+        $this->assertFalse($response->isFailed());
 
         $this->assertEquals('PENDING', $response->getCode());
         $this->assertNull($response->getMessage());
@@ -75,9 +79,23 @@ class CompletePurchaseResponseTest extends TestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isPending());
-
+        $this->assertFalse($response->isFailed());
 
         $this->assertEquals('ERROR', $response->getCode());
         $this->assertEquals('Problem: consumer_key_unknown | Advice: >  |', $response->getMessage());
+    }
+
+    public function testNotificationAnswer()
+    {
+        $request = $this->getMockRequest();
+        $request->shouldReceive('getNotificationType')->andReturn('CHANGE');
+
+        $httpResponse = $this->getMockHttpResponse('CompletePurchaseCompleted.txt');
+        $response = new CompletePurchaseResponse($request, $httpResponse->getBody());
+
+        parse_str($response->getAnswer(), $data);
+        $this->assertEquals('CHANGE', $data['pesapal_notification_type']);
+        $this->assertEquals('550e8400-e29b-41d4-a716-446655440000', $data['pesapal_transaction_tracking_id']);
+        $this->assertEquals('1f3870be274f6c49b3e31a0c6728957f', $data['pesapal_merchant_reference']);
     }
 }
