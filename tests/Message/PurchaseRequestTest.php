@@ -25,14 +25,14 @@ class PurchaseRequestTest extends TestCase
                 'card'  => $this->getValidCard(),
                 'description' => 'Test payment 1',
                 'transactionId' => '1234',
-                'items' => [
-                    [
+                'items' => array(
+                    array(
                         'name' => 'product',
                         'description' => 'My product',
                         'quantity' => 1,
                         'price' => 10,
-                    ]
-                ]
+                    ),
+                ),
             )
         );
     }
@@ -52,5 +52,6 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame('Test payment 1', $data['Description']);
         $this->assertSame('1234', $data['Reference']);
         $this->assertInstanceOf('\Omnipay\Common\ItemBag', $data['LineItems']);
+        $this->assertEquals(1, $data['LineItems']->count());
     }
 }
