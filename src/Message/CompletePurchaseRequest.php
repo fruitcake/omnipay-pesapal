@@ -1,6 +1,8 @@
 <?php
 namespace Omnipay\Pesapal\Message;
 
+use Omnipay\Common\Exception\InvalidRequestException;
+
 
 /**
  * CompletePurchase Request
@@ -9,18 +11,15 @@ namespace Omnipay\Pesapal\Message;
  */
 class CompletePurchaseRequest extends AbstractRequest
 {
-    function getResource()
-    {
-        if ($this->getTransactionId()) {
-            return 'QueryPaymentDetails';
-        }
-
-        return 'QueryPaymentStatusByMerchantRef';
-    }
+    protected $resource = 'QueryPaymentDetails';
 
     public function getData()
     {
         $this->validate('key', 'secret');
+
+        if ( ! $this->getTransactionId()) {
+            throw new InvalidRequestException("A transactionId is required");
+        }
 
         $data = array(
             'pesapal_merchant_reference' => $this->getTransactionId(),

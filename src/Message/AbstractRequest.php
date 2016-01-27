@@ -15,6 +15,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
 {
     protected $liveEndpoint = 'https://www.pesapal.com/API/';
     protected $testEndpoint = 'http://demo.pesapal.com/API/';
+    protected $resource;
 
     public function getKey()
     {
@@ -70,13 +71,11 @@ abstract class AbstractRequest extends BaseAbstractRequest
         return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
 
-    abstract function getResource();
-
     abstract protected function createResponse($data);
 
     protected function createSignedUrl($params = array())
     {
-        $url = $this->getEndpoint(). $this->getResource();
+        $url = $this->getEndpoint(). $this->resource;
 
         // Generate signature
         $consumer = new Consumer($this->getKey(), $this->getSecret());

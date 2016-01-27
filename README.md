@@ -85,10 +85,6 @@ For general usage instructions, please see the main [Omnipay](https://github.com
 The transactionReference is `pesapal_transaction_tracking_id`, which is set by Pesapal.
 the transactionId is your own id (`pesapal_merchant_reference`), which will be generated if not provided.
 
-**Note, transactionReference, transactionId and paymentMethod are only available in the CompletePurchaseResponse
-when both `pesapal_transaction_tracking_id` and `pesapal_merchant_reference` are set in the query,
-or the transactionId and transactionReference are set as parameters. **
-
 See the documentation on [http://developer.pesapal.com/how-to-integrate/step-by-step](http://developer.pesapal.com/how-to-integrate/step-by-step)
 
 ### Sandbox / Demo

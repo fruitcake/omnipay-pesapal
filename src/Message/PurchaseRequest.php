@@ -10,11 +10,7 @@ use Omnipay\Common\Exception\InvalidRequestException;
  */
 class PurchaseRequest extends AbstractRequest
 {
-
-    function getResource()
-    {
-        return 'PostPesapalDirectOrderV4';
-    }
+    protected $resource = 'PostPesapalDirectOrderV4';
 
     public function sendData($data)
     {
